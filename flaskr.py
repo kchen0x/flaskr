@@ -33,10 +33,10 @@ def connect_db():
 def init_db():
     """Initiate database."""
     with APP.app_context():
-        database = get_db()
+        _db = get_db()
         with APP.open_resource('schema.sql', mode='r') as schema:
-            database.cursor().executescript(schema.read())
-        database.commit()
+            _db.cursor().executescript(schema.read())
+        _db.commit()
 
 
 def get_db():
@@ -48,7 +48,7 @@ def get_db():
 
 
 @APP.teardown_appcontext
-def close_db():
+def close_db(error):  # pylint: disable=locally-disabled, unused-argument
     """Close the database again at the end of the request."""
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
@@ -57,8 +57,8 @@ def close_db():
 @APP.route('/')
 def show_entries():
     """Get all the entries and render it with template."""
-    database = get_db()
-    cur = database.execute('SELECT title, text FROM entries ORDER BY id DESC;')
+    _db = get_db()
+    cur = _db.execute('SELECT title, text FROM entries ORDER BY id DESC;')
     entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
     return render_template('show_entries.html', entries=entries)
 
@@ -66,10 +66,10 @@ def show_entries():
 @APP.route('/add/', methods=['POST'])
 def add_entry():
     """Add new entry."""
-    database = get_db()
-    database.execute('INSERT INTO entries (title, text) VALUES (?, ?)',
-                     [request.form['title'], request.form['text']])
-    database.commit()
+    _db = get_db()
+    _db.execute('INSERT INTO entries (title, text) VALUES (?, ?)',
+                [request.form['title'], request.form['text']])
+    _db.commit()
     flash('New entry has been successfully posted!')
     return redirect(url_for('show_entries'))
 
