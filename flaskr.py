@@ -12,7 +12,7 @@ from flask import (Flask, flash, g, redirect, render_template, request,
 
 APP = Flask(__name__)
 
-# Load default config and override config from an environment variable
+# Load default config and override config from an instance cfg file
 APP.config.update(dict(
     DATABASE=os.path.join(APP.root_path, 'flaskr.db'),
     DEBUG=True,
@@ -20,7 +20,8 @@ APP.config.update(dict(
     USERNAME='admin',
     PASSWORD='admin'
 ))
-APP.config.from_envvar('FLASKR_SETTINGS', silent=True)
+APP.config.from_pyfile(os.path.join(
+    APP.instance_path, 'application.cfg'), silent=True)
 
 
 def connect_db():

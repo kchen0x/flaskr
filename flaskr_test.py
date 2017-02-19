@@ -30,15 +30,15 @@ class FlaskrTestCase(unittest.TestCase):
         assert 'No entries here so far' in _rv.data
 
     def test_login_logout(self):
-        _rv = self.login(username='admin', password='admin')
+        _rv = self.login(username='quentin', password='123456')
         assert 'You were logged in' in _rv.data
         _rv = self.logout()
         assert 'You were logged out' in _rv.data
-        _rv = self.login(username='adminx', password='admin')
+        _rv = self.login(username='quentinx', password='123456')
         assert 'Invalid username' in _rv.data
-        _rv = self.login(username='admin', password='adminx')
+        _rv = self.login(username='quentin', password='123456x')
         assert 'Invalid password' in _rv.data
-        _rv = self.login(username='adminx', password='adminx')
+        _rv = self.login(username='quentinx', password='123456x')
         assert 'Invalid username' in _rv.data
 
     def test_msgs(self):
