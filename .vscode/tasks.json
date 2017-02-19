@@ -1,0 +1,13 @@
+{
+    "version": "0.1.0",
+    "command": "python",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "tasks": [{
+        "taskName": "test_flaskr",
+        "args": [
+            "flaskr_test.py"
+        ],
+        "suppressTaskName": true
+    }]
+}
