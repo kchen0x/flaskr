@@ -6,3 +6,4 @@
 tags
 *.db
 .pylintrc
+*.pyc
